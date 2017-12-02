@@ -6,7 +6,9 @@ from google.cloud.language import types
 
 
 class Sentence:
+    __subject_carry_over = ['this', 'it', 'he', 'she', 'his', 'her']
     def __init__(self, text):
+        self.subject = None
         client = language.LanguageServiceClient()
 
         document = types.Document(
@@ -60,8 +62,33 @@ class Sentence:
             print(word, end=' ')
         print()
 
+    @staticmethod
+    def update_subject(sentence_list):
+        for sentence in sentence_list:
+            first_word = True
+            previous_subject = None
+            for word in sentence.words:
+                if first_word and word.content.lower() in Sentence.__subject_carry_over:
+                    sentence.subject = previous_subject
+                elif word.part_of_speech == 'NOUN':
+                    sentence.subject = word.content
+                first_word = False
+                previous_subject = sentence.subject
+        return sentence_list
+
+    @staticmethod
+    def seperate_sentences(word_list):
+        sentence_list = []
+        sentence = []
+        for word in word_list:
+            if word.content == ".":
+                sentence_obj = Sentence(sentence)
+                sentence_list.append(sentence_obj)
+                sentence = []
+            else:
+                sentence.append(word)
+        return sentence_list
+
 
 if __name__ == "__main__":
     test = Sentence(u'the Golden Gate is in Bell High School')
-
-    test.print_sentence()
