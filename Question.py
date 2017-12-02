@@ -1,6 +1,5 @@
 from Sentence import Sentence
 from Word import Word
-import copy
 
 
 class Question:
@@ -20,9 +19,13 @@ class Question:
                 self.sentence.words[i] = Word()
         return answer
 
+    def export(self):
+        return self.sentence.return_string(), self.answer.content
 
 if __name__ == "__main__":
     test = Sentence(u'the Golden Gate is in Bell High School')
     question = Question(test)
     question.sentence.print_sentence()
     print(question.answer)
+    print(question.export())
+

@@ -7,6 +7,7 @@ from google.cloud.language import types
 
 class Sentence:
     __subject_carry_over = ['this', 'it', 'he', 'she', 'his', 'her']
+
     def __init__(self, text):
         self.subject = None
         client = language.LanguageServiceClient()
@@ -61,6 +62,9 @@ class Sentence:
         for word in self.words:
             print(word, end=' ')
         print()
+
+    def return_string(self):
+        return ' '.join([word.content for word in self.words])
 
     @staticmethod
     def update_subject(sentence_list):
