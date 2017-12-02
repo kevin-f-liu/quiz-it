@@ -7,6 +7,17 @@ import re
 from Word import Word
 from Sentence import Sentence
 
+# pip install pytesseract
+# also get tesseract-ocr-setup-3.02.02.exe from https://sourceforge.net/projects/tesseract-ocr-alt/files/
+import pytesseract
+from PIL import Image
+
+pytesseract.pytesseract.tesseract_cmd = 'C:\\Program Files (x86)\\Tesseract-OCR\\tesseract'
+# might need to change the path above
+
+def GetTextFromImage(imagePath):
+    return pytesseract.image_to_string(Image.open('imagePath'))
+
 if __name__ == "__main__":
     client = language.LanguageServiceClient()
     text = u'The Golden Gate is in Bell High School. It is a cool Golden Gate Bridge.'
