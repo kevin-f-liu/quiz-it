@@ -57,20 +57,9 @@ if __name__ == "__main__":
                 wordsContentList[i] = entityContent.name
                 for j in range(i+1, i+len(entityContentArr)):
                     wordsContentList[j] = 0
-                # words.insert(i, entityContent)
-                    #  replace this with actually creating a word object that has the appropriate attributes
-                    # provided by entity (this means modifying the word object to be able to init a entity word)
 
     sentenceList = Sentence.seperate_sentences(words)
     sentenceList = Sentence.update_subject(sentenceList)
     for sentence in sentenceList:
-    	sentence.print_sentence()
-    # print(wordsContentList)
-    # print(matchIndices)
-    # print(entity.mentions)
-    # print( '/n')
-    # for word in words:
-    # 	print (word.content)
-    # 	print (word.pos)
-    # print('hellooooo')
+        sentence.print_sentence()
 
