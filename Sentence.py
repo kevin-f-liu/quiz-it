@@ -4,6 +4,8 @@ from google.cloud import language
 from google.cloud.language import enums
 from google.cloud.language import types
 
+from copy import deepcopy
+
 
 class Sentence:
     __subject_carry_over = ['this', 'it', 'he', 'she', 'his', 'her']
@@ -35,8 +37,9 @@ class Sentence:
         # includes all mentions in the entity_list
         for entity in entities:
             for mention in entity.mentions:
-                entity.name = mention.text.content
-                entity_list.append(entity)
+                copy = deepcopy(entity)
+                copy.name = mention.text.content
+                entity_list.append(copy)
 
         entity_list.sort(key=lambda item: (-len(item.name), item.name))
 
@@ -58,25 +61,29 @@ class Sentence:
                         #  replace this with actually creating a word object that has the appropriate attributes
                         # provided by entity (this means modifying the word object to be able to init a entity word)
 
-    def print_sentence(self):
-        for word in self.words:
-            print(word, end=' ')
-        print()
+    def __str__(self):
+        return self.return_string()
 
     def return_string(self):
+        """
+        :return: sentence in string format
+        """
         return ' '.join([word.content for word in self.words])
 
     @staticmethod
     def update_subject(sentence_list):
+        previous_subject = None
         for sentence in sentence_list:
-            first_word = True
-            previous_subject = None
-            for word in sentence.words:
-                if first_word and word.content.lower() in Sentence.__subject_carry_over:
-                    sentence.subject = previous_subject
-                elif word.part_of_speech == 'NOUN':
-                    sentence.subject = word.content
-                first_word = False
+            nouns = [word for word in sentence.words if word.part_of_speech == 'NOUN' or word.part_of_speech == 'PRON']
+            if nouns[0].content.lower() in Sentence.__subject_carry_over:
+                sentence.subject = previous_subject
+                if previous_subject:
+                    nouns[0].content = sentence.subject.content
+                else:
+                    sentence_list.remove(sentence)
+            else:
+                entity = [noun for noun in nouns if noun.entity][0]
+                sentence.subject = entity
                 previous_subject = sentence.subject
         return sentence_list
 
