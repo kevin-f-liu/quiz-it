@@ -5,11 +5,11 @@ from google.cloud.language import types
 import re
 
 from Word import Word
-
+from Sentence import Sentence
 
 if __name__ == "__main__":
     client = language.LanguageServiceClient()
-    text = u'The Golden Gate is in Bell High School. It is a cool Golden Gate Bridge'
+    text = u'The Golden Gate is in Bell High School. It is a cool Golden Gate Bridge.'
 
     document = types.Document(
         content=text,
@@ -37,20 +37,23 @@ if __name__ == "__main__":
             entity.name = mention.text.content
             entityList.append(entity)
 
+    #sorts the entity list by length shortest to longest
     entityList.sort(key=lambda item: (-len(item.name), item.name))
 
     # replace the words with entities if possible
     # group together words appearing in the same entity
     matchIndices = []
     for entityContent in entityList:
+
         entityContentArr = entityContent.name.split(' ')
+        # 
         for i in range(len(wordsContentList)):
             if i >= len(words):
                 break
             if wordsContentList[i] == entityContentArr[0] \
                     and wordsContentList[i:i + len(entityContentArr)] == entityContentArr:
                 del words[i + 1:i + len(entityContentArr)]
-                words[i].addEntity(entityContent)
+                words[i].add_entity(entityContent)
                 wordsContentList[i] = entityContent.name
                 for j in range(i+1, i+len(entityContentArr)):
                     wordsContentList[j] = 0
@@ -58,8 +61,10 @@ if __name__ == "__main__":
                     #  replace this with actually creating a word object that has the appropriate attributes
                     # provided by entity (this means modifying the word object to be able to init a entity word)
 
-    for word in words:
-        print(word.content)
+    sentenceList = Sentence.seperate_sentences(words)
+    sentenceList = Sentence.update_subject(sentenceList)
+    for sentence in sentenceList:
+    	sentence.print_sentence()
     # print(wordsContentList)
     # print(matchIndices)
     # print(entity.mentions)
