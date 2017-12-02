@@ -50,7 +50,7 @@ if __name__ == "__main__":
             if wordsContentList[i] == entityContentArr[0] \
                     and wordsContentList[i:i + len(entityContentArr)] == entityContentArr:
                 del words[i + 1:i + len(entityContentArr)]
-                words[i].addEntity(entityContent)
+                words[i].add_entity(entityContent)
                 wordsContentList[i] = entityContent.name
                 for j in range(i+1, i+len(entityContentArr)):
                     wordsContentList[j] = 0
@@ -59,7 +59,8 @@ if __name__ == "__main__":
                     # provided by entity (this means modifying the word object to be able to init a entity word)
 
     for word in words:
-        print(word.content)
+        # print(word.content)
+        word.print_word()
     # print(wordsContentList)
     # print(matchIndices)
     # print(entity.mentions)
