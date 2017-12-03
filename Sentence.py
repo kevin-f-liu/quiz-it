@@ -75,6 +75,9 @@ class Sentence:
         previous_subject = None
         for sentence in sentence_list:
             nouns = [word for word in sentence.words if word.part_of_speech == 'NOUN' or word.part_of_speech == 'PRON']
+            if not nouns:
+                sentence_list.remove(sentence)
+                continue
             if nouns[0].content.lower() in Sentence.__subject_carry_over:
                 sentence.subject = previous_subject
                 if previous_subject:
@@ -82,8 +85,11 @@ class Sentence:
                 else:
                     sentence_list.remove(sentence)
             else:
-                entity = [noun for noun in nouns if noun.entity][0]
-                sentence.subject = entity
+                entities = [noun for noun in nouns if noun.entity]
+                if not entities:
+                    sentence_list.remove(sentence)
+                    continue
+                sentence.subject = entities[0]
                 previous_subject = sentence.subject
         return sentence_list
 
