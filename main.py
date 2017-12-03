@@ -11,7 +11,7 @@ import vision
 
 if __name__ == "__main__":
     client = language.LanguageServiceClient()
-    """text = u'Socrates was a philosopher who taught many young minds. \
+    text = u'Socrates was a philosopher who taught many young minds. \
             Socrates even taught Plato another great philosopher. \
             This great philosopher lived in the fifth century B.C. \
             Socrates was wrongly accused and sentenced to death, but his knowledge lives on. \
@@ -19,8 +19,8 @@ if __name__ == "__main__":
             Socrates was born in a village on the side of Mount Lycabettus. \
             His father was a sculptor who was excellent at his job. When he was old enough his father taught \
             him how to be sculptor but his creations always came out less than acceptable in the eyes of the clients. \
-            His mother was a mid wife. She helped deliver a lot of the children in Athens.'"""
-    text = vision.detect_document('picture.jpg')
+            His mother was a mid wife. She helped deliver a lot of the children in Athens.'
+    # text = vision.detect_document('picture.jpg')
 
     sentenceList = Sentence.seperate_sentences(text)
     sentenceList = Sentence.update_subject(sentenceList)

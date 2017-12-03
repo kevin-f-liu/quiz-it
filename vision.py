@@ -2,6 +2,7 @@ from google.cloud import vision
 from google.cloud.vision import types
 import io
 
+
 def detect_document(path):
     client = vision.ImageAnnotatorClient()
     with io.open(path, 'rb') as image_file:

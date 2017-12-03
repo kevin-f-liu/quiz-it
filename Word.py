@@ -10,6 +10,7 @@ class Word:
             self.part_of_speech = None
         self.entity = None
         self.salience = 0
+        self.wiki = None
 
     def add_entity(self, entity):
         entity_type = ('UNKNOWN', 'PERSON', 'LOCATION', 'ORGANIZATION',
@@ -17,6 +18,8 @@ class Word:
         self.entity = entity_type[entity.type]
         self.salience = entity.salience
         self.content = entity.name
+        if entity.metadata and entity.metadata['wikipedia_url']:
+            self.wiki = entity.metadata['wikipedia_url']
 
     def print_word(self):
         print({"content": self.content, "part_of_speech": self.part_of_speech, "entity": self.entity,
