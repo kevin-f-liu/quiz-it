@@ -1,0 +1,25 @@
+{
+    "intents": [
+        {
+            "intent": "GetQuizes"
+        },
+        {
+            "intent": "QuizMe",
+            "slots": [
+                {
+                    "name": "Quiz",
+                    "type": "QUIZES"
+                }
+            ]
+        },
+        {
+            "intent": "AnswerQuestion",
+            "slots": [
+                {
+                    "name": "Answer",
+                    "type": "ANSWERS"
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,21 @@
+GetQuizes get quizes
+GetQuizes please get quizes
+GetQuizes what quizes are there
+GetQuizes get all quizes
+GetQuizes show quizes
+GetQuizes list my quizes
+GetQuizes show me my quizes
+GetQuizes get my quizes
+
+QuizMe quiz me on {Quiz}
+QuizMe test me on {Quiz}
+QuizMe try me on {Quiz}
+
+AnswerQuestion the answer is {Answer}
+AnswerQuestion {Answer} is the answer
+AnswerQuestion answer is {Answer}
+AnswerQuestion I think it's {Answer}
+AnswerQuestion It's {Answer}
+AnswerQuestion Probably {Answer}
+AnswerQuestion I think it is {Answer}
+AnswerQuestion Is it {Answer}
