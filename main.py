@@ -7,7 +7,7 @@ import re
 from Word import Word
 from Sentence import Sentence
 from Question import Question
-import vision
+# import vision
 
 if __name__ == "__main__":
     client = language.LanguageServiceClient()
