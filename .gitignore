@@ -102,3 +102,7 @@ ENV/
 
 # Alexa user secrets
 .secrets.txt
+
+# Google service account credentials
+hackathon-89ee0c07689f.json
+service_credentials.json
