@@ -106,3 +106,6 @@ ENV/
 # Google service account credentials
 hackathon-89ee0c07689f.json
 service_credentials.json
+
+# Webapp secrets
+secrets.sh
