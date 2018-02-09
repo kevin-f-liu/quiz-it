@@ -20,7 +20,7 @@ class Sentence:
 
         entities = client.analyze_entities(document).entities
         tokens = client.analyze_syntax(document).tokens
-
+ 
         self.words = []
         entity_list = []
 

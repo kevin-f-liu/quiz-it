@@ -1,13 +1,16 @@
-from Sentence import Sentence
-from Word import Word
-from bs4 import BeautifulSoup
 import requests
 
+from bs4 import BeautifulSoup
+
+from sentence import Sentence
+from word import Word
 
 class Question:
+    """ Contains question generation logic """
     __key_words = ('is', 'was', 'because', 'in', 'during', 'between')
 
     def __init__(self, sentence):
+        """ Create a question from a sentence"""
         self.sentence = sentence
         self.answer = self.generate_blank()
 
@@ -24,7 +27,7 @@ class Question:
         return answer
 
     def export(self):
-        return self.sentence.return_string(), self.answer.content
+        return str(self.sentence), self.answer.content
 
     @staticmethod
     def is_question(sentence):
@@ -32,7 +35,7 @@ class Question:
         entities = [word for word in sentence.words if word.entity]
 
         # gets all the words in the sentence as a list of strings
-        words = sentence.return_string().split()
+        words = sentence.text.split()
 
         if len(entities) == 0:
             return False
@@ -57,8 +60,8 @@ class Question:
 
 
 if __name__ == "__main__":
-    tests = [Sentence(u'Elon Musk flew a car into space.'),
-             Sentence(u'Elon Musk flew a car into space.'),
+    tests = [Sentence(u'I love pancakes with banana'),
+             Sentence(u'the mitochondria is the powerhouse of the cell'),
              Sentence(u'Socrates was a greek philosopher'),
              Sentence(u'he was a very important person')]
     Sentence.update_subject(tests)
@@ -67,3 +70,4 @@ if __name__ == "__main__":
     questions = [Question(test) for test in tests if Question.is_question(test)]
     for question in questions:
         print(question.export())
+

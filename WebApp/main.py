@@ -1,15 +1,14 @@
-from google.cloud import language
-from google.cloud.language import enums
-from google.could.language import types
 import json
 
+from google.cloud import language
+from google.cloud.language import enums
+from google.cloud.language import types
+
+from question_engine import QuestionEngine
 
 if __name__ == "__main__":
-    # Init natural language processing service with API key
-    # API keys do not identify the user/application
-    # service = build('language', 'v1', developerKey='AIzaSyBcSxRU7-u2ietvX0XlkFW8KMblQMQx3w4')
-    # request = language.documents.annotateText(document="asdfasdf")
+    text = "Elon Musk flew a car into space. He is a god! Everyone should love Elon. This is going to be a weird sentence, so bear with me; I love weird sentences!"
 
-    # Using Google Cloud Client Library
-    client = language.LanguageServiceClient()
-    
+    engine = QuestionEngine()
+
+    engine.generate_from_text(text)
