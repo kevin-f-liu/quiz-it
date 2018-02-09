@@ -25,10 +25,14 @@ class QuestionEngine:
             questions (List[Question]): List of question objects created from text
         """
         sentences = self._get_sentences(text)
-        # sentences = Sentence.update_subject(sentences)
-        # questions = [Question(sentences) for sentences in sentences if Question.is_question(sentences)]
-        # for question in questions:
-        #     print(question.export())
+        # for s in sentences:
+        #     print(s)
+        sentences = Sentence.update_subject(sentences)
+        for s in sentences:
+            print(s)
+        questions = [Question(sentences) for sentences in sentences ]
+        for question in questions:
+            print(question.export())
 
 
     

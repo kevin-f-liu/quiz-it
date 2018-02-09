@@ -13,5 +13,45 @@ TAG_PERSON = ('FIRST', 'SECOND', 'THIRD', 'REFLEXIVE_PERSON')
 # Gender
 TAG_GENDER = ('FEMININE', 'MASCULINE', 'NEUTER')
 
-# 
-_SUBJECT_CARRY_OVER = ['this', 'it', 'he', 'she', 'his', 'her']
+# Proper-ness
+TAG_PROPER = ('PROPER', 'NOT_PROPER')
+
+# Pronouns that can be easily replaced by a subject. Contains information on the number, person, and gender
+PRONOUNS = {
+    'it': {
+        'entity_tag': 'ANY',
+        'number': 'SINGULAR',
+        'person': 'THIRD',
+        'gender': 'NEUTER'
+    }, 
+    'he': {
+        'entity_tag': 'PERSON',
+        'number': 'SINGULAR',
+        'person': 'THIRD',
+        'gender': 'MASCULINE'
+    }, 
+    'she': {
+        'entity_tag': 'PERSON',
+        'number': 'SINGULAR',
+        'person': 'THIRD',
+        'gender': 'FEMININE'
+    }, 
+    'his': {
+        'entity_tag': 'PERSON',
+        'number': 'SINGULAR',
+        'person': 'THIRD',
+        'gender': 'MASCULINE'
+    }, 
+    'her': {
+        'entity_tag': 'PERSON',
+        'number': 'SINGULAR',
+        'person': 'THIRD',
+        'gender': 'FEMININE'
+    }, 
+    'they': {
+        'entity_tag': 'ANY',
+        'number': 'PLURAL',
+        'person': 'THIRD',
+        'gender': 'NEUTER'
+    }, 
+}

@@ -7,43 +7,26 @@ from word import Word
 
 class Question:
     """ Contains question generation logic """
-    __key_words = ('is', 'was', 'because', 'in', 'during', 'between')
 
     def __init__(self, sentence):
         """ Create a question from a sentence"""
         self.sentence = sentence
-        self.answer = self.generate_blank()
+        self.answer = None
 
-    def generate_blank(self):
-        # sorts the words by highest salience first
-        words = sorted(self.sentence.words, key=lambda x: x.salience, reverse=True)
-        # keep only the words that are entities
-        words = [word for word in words if word.entity]
-        answer = words[0]
+        self._create_question()
+
+    def _create_question(self):
+        answer = self.sentence.subject_major
+
         # replace the word being used as answer with a blank
-        for i, word in enumerate(self.sentence.words):
-            if word == answer:
-                self.sentence.words[i] = Word()
-        return answer
+        for word in self.sentence.words:
+            if word.entity == answer:
+                word.blank = True
+        self.answer = answer
 
     def export(self):
-        return str(self.sentence), self.answer.content
-
-    @staticmethod
-    def is_question(sentence):
-        # gets list of all entities in the sentence
-        entities = [word for word in sentence.words if word.entity]
-
-        # gets all the words in the sentence as a list of strings
-        words = sentence.text.split()
-
-        if len(entities) == 0:
-            return False
-
-        # else
-        for word in words:
-            if word in Question.__key_words:
-                return True
+        return str(self.sentence), self.answer.name
+        
 
     @staticmethod
     def get_wiki_questions(sentence):
