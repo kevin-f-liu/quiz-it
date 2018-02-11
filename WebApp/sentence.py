@@ -13,7 +13,7 @@ class Sentence:
         text (String): The sentence in string form
         entity_list (List[GoogleAnalyzeEntitiesResponse]): Entities in the sentence, in order of appearance
         entity_reference (Dict): Quick lookup of entities by content
-        tokens (List[GoogleAnalyzeSyntaxResponse]): Syntactual tokens in the sentence
+        tokens (List[GoogleAnalyzeSyntaxResponse]): Syntactual tokens in the sentence. Currently Unused
         words (List[Word]): List of Word objects
         subject_major (Entity): Main subject of the sentence. Highest salience entity
         subject_minors (List[Entity]): Other words that are entities in the sentence
@@ -94,29 +94,34 @@ class Sentence:
         
         words = []
 
-        current_entity = 0
-        current_word = 0
-        current_entity_words = []
-        current_entity_words_pointer = 0
+        current_entity = 0                 # Pointer tracking the current entity in self.entity_list
+        current_word = 0                   # Pointer tracking the current word in self.words
+        current_entity_words = []          # A list of strings that represent the current entity name
+        current_entity_words_pointer = 0   # Pointer tracking the current word in 
 
         for idx, tok in enumerate(tokens):
-            # Add the entity that a word belongs in 
+            # Set attribute
+            self.tokens.append(tok)
+
             if idx >= current_word and current_entity < len(self.entity_list):
                 current_word = idx
                 current_entity_words = self.entity_list[current_entity].name.split()
+                # When a word that matches the start of the entity is found, 
+                # Advance until the whole entity is found, or until the words fail to match
+                # If the entity is found then current_word is at the end of it, otherwise reset pointers
                 while current_word < len(tokens) and current_entity_words_pointer < len(current_entity_words)\
                         and tokens[current_word].text.content == current_entity_words[current_entity_words_pointer]:
                     
                     current_entity_words_pointer += 1
                     current_word += 1
-                # Done
+                # Done linear search
                 if current_entity_words_pointer == len(current_entity_words):
                     current_entity += 1
-                    current_entity_words_pointer = 0
                 else:
                     # Failed to find full entity name so reset to current
                     current_word = idx
-
+                current_entity_words_pointer = 0
+                
             word_entity = self.entity_list[current_entity - 1] if idx < current_word else None
             word_entity_tag = self.entity_list[current_entity - 1].type if idx < current_word else None
             word_salience = self.entity_list[current_entity - 1].salience if idx < current_word else 0
@@ -138,11 +143,13 @@ class Sentence:
 
 
     def print_words(self):
+        """ Print every word """
         for w in self.words:
             print(str(w))
 
 
     def __str__(self):
+        """ Called when an instance is cast into a string """
         ret = ""
         for e in self.words:
             ret += e.get_content()
@@ -151,14 +158,22 @@ class Sentence:
 
 
     @staticmethod
-    def update_subject(sentence_list):
+    def backreference_pronouns(sentence_list):
         """ Given a list of sentences, replace pronouns with the subject of the sentence, or the one before. 
             Ex: "Elon Musk's car is midnight red. It is also fast." -> "Elon Musk's car is midnight red. The car is also fast."
         
         Args:
             sentence_list (List): list of sentences to modify
+        Returns:
+            sentence_list (List): same list of sentences with modified pronouns
         """
         def _update_sentence_pronoun(sentence, pron, prev_sub):
+            """ Changes the sentence and updates the pronoun 
+            Args:
+                sentence (Sentence): sentence to be modified
+                pron (Word): Word in the sentence to be modified
+                prev_sub (Entity): Backreference target used to update pronoun
+            """
             if not sentence.subject_major:
                 sentence.subject_major = prev_sub
             else:
@@ -172,7 +187,6 @@ class Sentence:
         previous_subject = None
         previous_subject_minors = []
         for sentence in sentence_list:
-            print()
             pronouns = [word for word in sentence.words if TAG_POS[word.pos] == 'PRON']
             entities = sentence.entity_list
             if not entities and not pronouns:
@@ -181,22 +195,27 @@ class Sentence:
                 continue
             
             if pronouns:
-                # Reference all pronouns to previous sentence
+                # Tries to reference all pronouns to previous sentence
                 # Generally, each pronoun matches exactly one subject in the previous sentence
+                # TODO: Name gender matching? API does not support.
                 available_subjects = [previous_subject]
                 available_subjects.extend(previous_subject_minors)
-                for pron in pronouns:
-                    if pron.get_content().lower() in PRONOUNS:
-                        for prev_sub in available_subjects:
-                            print(prev_sub.type)
-                            if PRONOUNS[pron.get_content().lower()]['entity_tag'] == 'PERSON':
-                                # Pronoun is a person
-                                if TAG_ENTITY[prev_sub.type] == 'PERSON':
+                
+                for prev_sub in list(available_subjects):
+                    for pron in pronouns:
+                        if pron.get_content().lower() in PRONOUNS:
+                            if TAG_ENTITY[prev_sub.type] == 'PERSON':
+                                # Previous subject is a person
+                                if PRONOUNS[pron.get_content().lower()]['entity_tag'] == 'PERSON':
                                     available_subjects.remove(prev_sub)
                                     _update_sentence_pronoun(sentence, pron, prev_sub)
                                     break
-                            elif pron.get_content().lower() == 'it' :
-                                # Pronoun is generic
+                            else:
+                                # Do not backreference a person for a generic. i.e 'it'
+                                if PRONOUNS[pron.get_content().lower()]['entity_tag'] == 'PERSON':
+                                    continue
+
+                                # Previous subject is generic
                                 available_subjects.remove(prev_sub)
                                 _update_sentence_pronoun(sentence, pron, prev_sub)
                                 break

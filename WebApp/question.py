@@ -6,30 +6,46 @@ from sentence import Sentence
 from word import Word
 
 class Question:
-    """ Contains question generation logic """
-
+    """ Represents a question to be asked
+    Params:
+        sentence (Sentence): Underlying sentence
+        answer (String): Answer pulled from the sentence
+    """
     def __init__(self, sentence):
-        """ Create a question from a sentence"""
+        """ Create a question from a sentence
+        Args:
+            sentence (Sentence): Underlying sentence
+        """
         self.sentence = sentence
         self.answer = None
 
         self._create_question()
 
+
     def _create_question(self):
+        """ Create a question by blanking out the major subject of the sentence. Stores blanked word as answer """
         answer = self.sentence.subject_major
 
         # replace the word being used as answer with a blank
         for word in self.sentence.words:
             if word.entity == answer:
                 word.blank = True
-        self.answer = answer
+        self.answer = answer.name
+
 
     def export(self):
-        return str(self.sentence), self.answer.name
-        
+        """ Resolve question into a question and an answer
+        Returns:
+            Tuple of sentence string and answer
+        """
+        return str(self.sentence), self.answer
+
 
     @staticmethod
     def get_wiki_questions(sentence):
+        """ Get questions from related wikipedia pages
+            STILL UNDER TODO
+        """
         wiki_links = set([word.wiki for word in sentence.words if word.wiki and word.salience > 0.25])
         if len(wiki_links) == 0:
             return Question(sentence)

@@ -18,26 +18,21 @@ class QuestionEngine:
         
     
     def generate_from_text(self, text):
-        """ Entrypoint for inputting text, then converting to a problem set
+        """ Entry point for inputting text, then converting to a problem set
         Args:
             text (String): Text (can be multiple sentences) that should be converted to questions
         Returns:
             questions (List[Question]): List of question objects created from text
         """
         sentences = self._get_sentences(text)
-        # for s in sentences:
-        #     print(s)
-        sentences = Sentence.update_subject(sentences)
-        for s in sentences:
-            print(s)
-        questions = [Question(sentences) for sentences in sentences ]
-        for question in questions:
-            print(question.export())
+        sentences = Sentence.backreference_pronouns(sentences)
+        questions = self._generate_questions(sentences)
+        
+        return questions
 
 
-    
     def generate_from_image(self, url):
-        """ Entrypoint for inputting image, then converting to a problem set
+        """ Entry point for inputting image, then converting to a problem set
         Args:
             url (String): url of the image to be converted into text, and then to questions
         Returns:
@@ -99,11 +94,6 @@ class QuestionEngine:
 
             sentences_tokens.append(next_sentence)
 
-        # for s in sentences_tokens:
-        #     for t in s:
-        #         print(t.dependency_edge, end=' ')
-        #     print()
-
         assert len(sentences) == len(sentences_tokens)
         return sentences_tokens
 
@@ -115,6 +105,8 @@ class QuestionEngine:
         Returns:
             questions (List[Question]): List of question objects
         """
+        return [Question(sentences) for sentences in sentences]
+
 
     def _get_entities(self, text):
         """ Api call to retrieve text entities """
