@@ -142,21 +142,6 @@ class Sentence:
         self.words = words
 
 
-    def print_words(self):
-        """ Print every word """
-        for w in self.words:
-            print(str(w))
-
-
-    def __str__(self):
-        """ Called when an instance is cast into a string """
-        ret = ""
-        for e in self.words:
-            ret += e.get_content()
-            ret += ' '
-        return ret
-
-
     @staticmethod
     def backreference_pronouns(sentence_list):
         """ Given a list of sentences, replace pronouns with the subject of the sentence, or the one before. 
@@ -202,6 +187,8 @@ class Sentence:
                 available_subjects.extend(previous_subject_minors)
                 
                 for prev_sub in list(available_subjects):
+                    if not prev_sub:
+                        continue
                     for pron in pronouns:
                         if pron.get_content().lower() in PRONOUNS:
                             if TAG_ENTITY[prev_sub.type] == 'PERSON':
@@ -227,6 +214,22 @@ class Sentence:
                 previous_subject_minors = sentence.subject_minors
                 
         return sentence_list
+
+    
+    def print_words(self):
+        """ Print every word """
+        for w in self.words:
+            print(str(w))
+
+
+    def __str__(self):
+        """ Called when an instance is cast into a string """
+        ret = ""
+        for e in self.words:
+            if TAG_POS[e.pos] != 'PUNCT' and ret:
+                ret += ' '
+            ret += e.get_content()
+        return ret
 
 
 if __name__ == "__main__":
