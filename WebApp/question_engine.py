@@ -57,10 +57,10 @@ class QuestionEngine:
         response_sentences = [s for s in document_syntax.sentences]
         response_tokens = [t for t in document_syntax.tokens]
         response_sentences_tokens = self._group_tokens_to_sentences(response_sentences, response_tokens)
-
         sentences = []
         for idx, sentence in enumerate(response_sentences):
             response_sentence_entities = self._get_entities(sentence.text.content)
+            print(response_sentence_entities)
             sentences.append(Sentence(sentence.text.content, response_sentence_entities, response_sentences_tokens[idx]))
 
         return sentences

@@ -133,6 +133,7 @@ class Sentence:
                     entity_tag=word_entity_tag,
                     salience=word_salience,
                     pos=tok.part_of_speech.tag, 
+                    begin_offset=tok.text.begin_offset,
                     head_token=tok.dependency_edge.head_token_index,
                     number=tok.part_of_speech.number,
                     person=tok.part_of_speech.person,
@@ -180,21 +181,23 @@ class Sentence:
                 continue
             
             if pronouns:
-                # Tries to reference all pronouns to previous sentence
+                # Tries to reference all pronouns to previous sentence, if and only if the pronoun doesn't have a potential reference already
                 # Generally, each pronoun matches exactly one subject in the previous sentence
                 # TODO: Name gender matching? API does not support.
                 available_subjects = [previous_subject]
                 available_subjects.extend(previous_subject_minors)
+                matched_entity_tags = []
                 
                 for prev_sub in list(available_subjects):
                     if not prev_sub:
                         continue
                     for pron in pronouns:
-                        if pron.get_content().lower() in PRONOUNS:
+                        if pron.get_content().lower() in PRONOUNS and PRONOUNS[pron.get_content().lower()]['entity_tag'] not in matched_entity_tags:
                             if TAG_ENTITY[prev_sub.type] == 'PERSON':
                                 # Previous subject is a person
                                 if PRONOUNS[pron.get_content().lower()]['entity_tag'] == 'PERSON':
                                     available_subjects.remove(prev_sub)
+                                    matched_entity_tags.append('PERSON')
                                     _update_sentence_pronoun(sentence, pron, prev_sub)
                                     break
                             else:

@@ -176,7 +176,6 @@ function selectQuizAndGetTerms(intent, session, callback) {
     if (!selectedQuizID) {
         // Selected a quiz that doesn't exist
         responseText = 'Oops that\'s not one of your quizes. Try picking another quiz!';
-        repromptText = 'Try picking another quiz!';
         callback(sessionAttributes, buildSpeechletResponse(null, responseText, repromptText, shouldEndSession));
         return;
     }
@@ -191,9 +190,11 @@ function selectQuizAndGetTerms(intent, session, callback) {
         var terms = bodyObj.terms;
         var termItems = {};
         for (var term in terms) {
-            termItems[terms[term].term] = terms[term].definition;
+            var modifiedTerm = terms[term].term.replace('_____', 'blank')
+            termItems[modifiedTerm] = terms[term].definition;
         }
         termItems = randomizeTerms(termItems);
+
 
         sessionAttributes['terms'] = termItems; // Store new terms
         sessionAttributes['currentTerm'] = 0; // Store index of current question
@@ -281,7 +282,7 @@ function answerQuestionAndCheck(intent, session, callback) {
  */
 function handleSessionEndRequest(callback) {
     const cardTitle = 'Session Ended';
-    const speechOutput = 'Thank you for trying the Alexa Skills Kit sample. Have a nice day!';
+    const speechOutput = 'Thank you for playing QuizIt. Have a nice day!';
     // Setting this to true ends the session and exits the skill.
     const shouldEndSession = true;
 

@@ -11,6 +11,7 @@ class Word:
         self.salience   = kwargs.get('salience', 0)
         self.entity_tag = kwargs.get('entity_tag', None)
         self.pos        = kwargs.get('pos', None)
+        self.index      = kwargs.get('begin_offset', None)
         self.head_token = kwargs.get('head_token', None)
         self.number     = kwargs.get('number', None)
         self.person     = kwargs.get('person', None)

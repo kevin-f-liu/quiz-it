@@ -19,18 +19,23 @@ class Question:
         self.sentence = sentence
         self.answer = None
 
-        self._create_question()
+        self._create_question_simple()
 
 
-    def _create_question(self):
-        """ Create a question by blanking out the major subject of the sentence. Stores blanked word as answer """
-        answer = self.sentence.subject_major
+    def _create_question_simple(self):
+        """ Create a question by blanking out an important word of the sentence. Stores blanked word as answer """
+        answer = self.sentence.subject_major # default
 
         # replace the word being used as answer with a blank
         for word in self.sentence.words:
             if word.entity == answer:
                 word.blank = True
         self.answer = answer.name
+
+    
+    def _create_question_improved(self):
+        """ Create a question this time based on heuristics """
+        pass
 
 
     def export(self):

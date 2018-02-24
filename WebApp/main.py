@@ -12,9 +12,8 @@ QUIZLET_BASE_URL = 'https://api.quizlet.com/2.0/sets'
 
 
 if __name__ == "__main__":
-    text = u'Entrepreneur Elon Musk\'s first generation Tesla Roadster is an electric car that he selected as "something fun and without irreplaceable sentimental value" to be launched into space on the maiden flight of the Falcon Heavy rocket. It was launched on February 6, 2018 as part of the boilerplate, or dummy payload, on the Falcon Heavy Demonstration Mission. The car and rocket were both manufactured by companies founded or directed by Musk: the car was built by Tesla while the rocket was built by SpaceX. Musk\'s Roadster is the first consumer car sent into space, it had previously been used by Musk to commute to work around Los Angeles.\
-The second stage with the car has sufficient velocity to escape the Earth and enter an elliptical heliocentric orbit that crosses the orbit of Mars, reaching an aphelion (maximum distance from the Sun) of 1.70 AU. During the early portion of its voyage it functioned as a broadcast device, sending live video back to Earth for slightly over four hours.'
-    quiz_title = "Autogen Quiz2"
+    text = 'Shopify was founded in 2004 by Tobias Lütke, Daniel Weinand, and Scott Lake after attempting to open Snowdevil, an online store for snowboarding equipment. Unsatisfied with the existing e-commerce products on the market, Lütke, a computer programmer by trade, instead built his own. Lütke used the open source web application framework Ruby on Rails to build Snowdevil\'s online store, and launched it after two months of development. The Snowdevil founders launched the platform as Shopify in June 2006. In June 2009, Shopify launched an API platform and App Store. The API allows developers to create applications for Shopify online stores and then sell them on the Shopify App Store. A Shopify window display in north London. In April 2010, Shopify launched a free mobile app on the Apple App Store. The app lets Shopify store owners view and manage their stores from iOS mobile devices. In 2010, Shopify started its Build-A-Business competition, in which participants create a business using its commerce platform. The winners of the competition receive cash prizes and mentorship from entrepreneurs, such as Richard Branson, Eric Ries and others. Shopify was named Ottawa’s Fastest Growing Company by the Ottawa Business Journal in 2010. The company received $7 million from an initial series A round of venture capital financing in December 2010. Its Series B round raised $15 million in October 2011.'
+    quiz_title = "Shopify Quiz"
 
 
     question_engine = QuestionEngine()
@@ -33,4 +32,4 @@ The second stage with the car has sufficient velocity to escape the Earth and en
         body.append(('definitions[]', answer))
         
     print(body)
-    # r = requests.post(QUIZLET_BASE_URL, headers=header, data=body)
+    r = requests.post(QUIZLET_BASE_URL, headers=header, data=body)
